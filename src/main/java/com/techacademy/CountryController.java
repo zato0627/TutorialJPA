@@ -23,16 +23,15 @@ public class CountryController {
 	public String getList(Model model) {
 		//全件検索結果をModelに登録
 		model.addAttribute("countrylist", service.getCountryList());
-		//country/list\t.htmlに画面遷移
+		//country/list.htmlに画面遷移
 		return "country/list";
 	}
 
-	//------追加:ここから-----
 	//------詳細画面-------
-	@GetMapping(value = {"/detail", "/detail/{code}/"})
+	@GetMapping("/detail/{code}")
 	public String getCountry(@PathVariable(name = "code", required = false) String code, Model model) {
 		//codeが指定されていたら検索結果、なければ空のクラスを設定
-		Country country = code != null ? service.getCountry(code) : new Country();
+		Country country = service.getCountry(code);//code != null ? service.getCountry(code) : new Country();
 		//Modelに登録
 		model.addAttribute("country", country);
 		//country/detail.htmlに画面遷移
@@ -43,25 +42,25 @@ public class CountryController {
 	@PostMapping("/detail")
 	public String postCountry(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("population") int population, Model model) {
 		//更新（追加）
-		service.updateCountry(code,  name,  population);
+		service.updateCountry(code, name, population);
 
 		//一覧画面にリダイレクト
 		return "redirect:/country/list";
 	}
 
 	//----削除画面----
-	@GetMapping("/delete")
-	public String deleteCountryForm(Model model) {
+	@GetMapping("/delete/{code}")
+	public String deleteCountryForm(@PathVariable("code") String code, Model model) {
+		model.addAttribute("code", code);
 		//country/delete.htmlに画面遷移
 		return "country/delete";
 	}
 
 	//----削除----
-	@PostMapping("/delete")
-	public String deleteCountry(@RequestParam("code") String code, Model model) {
+	@PostMapping("/delete/{code}")
+	public String deleteCountry(@PathVariable("code") String code, Model model) {
 		//削除
 		service.deleteCountry(code);
-
 		//一覧画面にリダイレクト
 		return "redirect:/country/list";
 	}

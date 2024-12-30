@@ -6,13 +6,14 @@
 </head>
 <body>
 	<h1>Country 詳細</h1>
-	<form method="post" action="/country/detail">
+	<form method="post" action="@{/country/detail/{code}(code=${country.code})}">
 		<table th:object="${country}">
 			<tr><th>コード</th><td><input type="text" name="code" th:value="*{code}"></td></tr>
 			<tr><th>国名</th><td><input type="text" name="name" th:value="*{name}"></td></tr>
 			<tr><th>人口</th><td><input type="text" name="population" th:value="*{population}"></td></tr>
 		</table>
 		<button type="submit">送信</button>
+		<a th:href="@{/country/list}">一覧に戻る</a>
 	</form>
 </body>
 </html>
